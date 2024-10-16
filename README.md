@@ -1,5 +1,6 @@
 # FloodFill Micromouse Simulation
-This project uses C to implement the FloodFill Algorithm in a software simulation Micromouse
+This project uses C to implement the FloodFill Algorithm in a software simulation Micromouse.
+I hope it useful for you.
 
 **Author Minh Tuan**
 
