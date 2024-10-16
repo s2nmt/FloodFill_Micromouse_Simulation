@@ -6,7 +6,6 @@ CFLAGS = -Wall -Werror -g
 CFLAGS += -Wno-unused
 # Source files
 SRC = Main.c API.c queue.c stack.c queue_int.c
-
 # Object files
 OBJ = $(SRC:.c=.o)
 

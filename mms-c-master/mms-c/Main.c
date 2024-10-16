@@ -4,7 +4,7 @@
 #include "queue.h"
 #include "queue_int.h"
 #include "stack.h"
-
+#include <stdlib.h>
 const  int rows=16;
 const  int cols=16;
 
@@ -15,6 +15,15 @@ void log_out(char* text) {
 bool isValid(int x, int y) {
     return (x >= 0 && x < rows && y >= 0 && y < cols);
 }
+char* intToStrver(int num) {
+  
+    char *str = (char*)malloc(12 * sizeof(char));  
+    if (str != NULL) {
+        sprintf(str, "%d", num);  
+    }
+    return str;
+}
+
 void init_arr(int arr[ROW][COL], int row, int col) {
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
@@ -173,8 +182,8 @@ cell_info update_walls(int angle_now,int row,int col)
     }
     for(int i=0;i<4;i++)
     {
-        int newRow=row+dy[i];
-        int newCol=col+dx[i];
+        int newRow=row+dy[i]; // 0 0 -1 1
+        int newCol=col+dx[i]; // 1 -1 0 0
         if(isValid(newRow,newCol))
         {
             if(i==UP)maze.cells[newRow][newCol].walls[DOWN]=maze.cells[row][col].walls[UP];
@@ -260,8 +269,8 @@ coord get_min_neighbour(cell_info cell_wall,coord cur, int (*arr)[ROW][COL],bool
         ind=dir;
         bool check_=cell_wall.walls[dir];
         if(change_)check_=check_wall_angle(cell_wall,&ind);
-        // fprintf(stderr, "%d", check_);
-        // fflush(stderr);
+        fprintf(stderr, "%d", check_);
+        fflush(stderr);
 
         if(isValid(newRow,newCol) && !check_)
         { 
@@ -315,6 +324,8 @@ void flood(Stack *stack_flood,int (*arr)[ROW][COL])
             if((*arr)[cur_stack.row][cur_stack.col]!=0)(*arr)[cur_stack.row][cur_stack.col]=min_neightbor+1;
         }
         int stack_size=sizeStack(stack_flood);
+
+    
         if(stack_size>=35){
             log_out("full stack");
             for(int i=0;i<stack_size;i++)
@@ -324,6 +335,7 @@ void flood(Stack *stack_flood,int (*arr)[ROW][COL])
             return;
         }
     }
+
 }
 coord floodfill(coord start,coord dest,int (*arr)[ROW][COL],int *angle_now)
 {
@@ -340,9 +352,8 @@ coord floodfill(coord start,coord dest,int (*arr)[ROW][COL],int *angle_now)
     pushStack(&stack_flood,start);
 
     int path_distance_value_find=0;
-    // int save_row,save_col;
     coord next_step;
-   //
+
     while(1)
     {
         if(!isEmptyQueue(&path_queue)) // dua ra quyet dinh va go
@@ -371,6 +382,7 @@ coord floodfill(coord start,coord dest,int (*arr)[ROW][COL],int *angle_now)
             log_out("empty Queue- break");
             break;
         }
+        update_wall_debug(arr);
     }
 
     while(!isEmptyQueue(&path_queue)) popQueue(&path_queue); 
@@ -491,11 +503,11 @@ int main(int argc, char* argv[]) {
     int angle_now=90;
     coord new_coord;
     new_coord = floodfill(start,dest,&arr,&angle_now);
-
-    init_flood_start(&arr,0,0,1);
-    log_out("done2");
-    new_coord=floodfill(new_coord,start,&arr,&angle_now);
-    init_flood_start(&arr,7,7,2);
-    shorted_path_go(&arr,angle_now,new_coord,dest);
+    // update_wall_debug(&arr);
+    // init_flood_start(&arr,0,0,1);
+    // log_out("done2");
+    // new_coord=floodfill(new_coord,start,&arr,&angle_now);
+    // init_flood_start(&arr,7,7,2);
+    // shorted_path_go(&arr,angle_now,new_coord,dest);
     return 0;
 }
